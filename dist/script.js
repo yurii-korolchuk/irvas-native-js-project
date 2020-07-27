@@ -14840,8 +14840,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 window.addEventListener('DOMContentLoaded', function () {
-  Object(_modules_modalWindow__WEBPACK_IMPORTED_MODULE_1__["default"])('.header_btn', '.popup_engineer', '.popup_engineer .popup_close');
-  Object(_modules_modalWindow__WEBPACK_IMPORTED_MODULE_1__["default"])('.phone_link', '.popup', '.popup .popup_close');
+  Object(_modules_modalWindow__WEBPACK_IMPORTED_MODULE_1__["bindModal"])('.header_btn', '.popup_engineer', '.popup_engineer .popup_close');
+  Object(_modules_modalWindow__WEBPACK_IMPORTED_MODULE_1__["bindModal"])('.phone_link', '.popup', '.popup .popup_close');
+  Object(_modules_modalWindow__WEBPACK_IMPORTED_MODULE_1__["showModalAfterTime"])('.popup', '.popup .popup_close', 60000);
 });
 
 /***/ }),
@@ -14850,11 +14851,13 @@ window.addEventListener('DOMContentLoaded', function () {
 /*!***************************************!*\
   !*** ./src/js/modules/modalWindow.js ***!
   \***************************************/
-/*! exports provided: default */
+/*! exports provided: showModalAfterTime, bindModal */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "showModalAfterTime", function() { return showModalAfterTime; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindModal", function() { return bindModal; });
 /* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
 /* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
 
@@ -14866,33 +14869,40 @@ var bindModal = function bindModal(openTriggerSelector, modalQuerySelector, clos
         e.preventDefault();
       }
 
-      openModal(modalQuerySelector);
-      document.querySelector(closeTriggerSelector).addEventListener('click', function (e) {
-        e.preventDefault();
-        closeModal(modalQuerySelector);
-      });
-      document.querySelector(modalQuerySelector).addEventListener('click', function (e) {
-        if (e.target && e.target === document.querySelector(modalQuerySelector)) {
-          closeModal(modalQuerySelector);
-        }
-      });
+      openModal(modalQuerySelector, closeTriggerSelector);
     });
   });
 };
 
-var openModal = function openModal(modalQuerySelector) {
+var showModalAfterTime = function showModalAfterTime(modalQuerySelector, closeTriggerSelector, time) {
+  setTimeout(function () {
+    openModal(modalQuerySelector, closeTriggerSelector);
+  }, time);
+};
+
+var openModal = function openModal(modalQuerySelector, closeTriggerSelector) {
   var modal = document.querySelector(modalQuerySelector);
   document.body.style.overflow = 'hidden';
   modal.style.display = 'block';
+
+  var closeModal = function closeModal(modalQuerySelector) {
+    var modal = document.querySelector(modalQuerySelector);
+    document.body.style.overflow = 'auto';
+    modal.style.display = 'none';
+  };
+
+  document.querySelector(modalQuerySelector).addEventListener('click', function (e) {
+    if (e.target && e.target === document.querySelector(modalQuerySelector)) {
+      closeModal(modalQuerySelector);
+    }
+  });
+  document.querySelector(closeTriggerSelector).addEventListener('click', function (e) {
+    e.preventDefault();
+    closeModal(modalQuerySelector);
+  });
 };
 
-var closeModal = function closeModal(modalQuerySelector) {
-  var modal = document.querySelector(modalQuerySelector);
-  document.body.style.overflow = 'auto';
-  modal.style.display = 'none';
-};
 
-/* harmony default export */ __webpack_exports__["default"] = (bindModal);
 
 /***/ }),
 
