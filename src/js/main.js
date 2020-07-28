@@ -1,8 +1,8 @@
 import './slider';
-import { bindModal, showModal, showModalAfterTime } from './modules/modalWindow';
+import modal from './modules/modalWindow';
+import tabs from './modules/tabs';
 
 window.addEventListener('DOMContentLoaded', () => {
-    bindModal('.header_btn', '.popup_engineer', '.popup_engineer .popup_close');
-    bindModal('.phone_link', '.popup', '.popup .popup_close');
-    showModalAfterTime('.popup', '.popup .popup_close', 60000);
+    modal();
+    tabs();
 });
