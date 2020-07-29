@@ -1,19 +1,16 @@
+import validateNumberInputs from './validateNumberInputs';
+
 const form = () => {
     const forms = document.querySelectorAll('form');
     const inputs = document.querySelectorAll('input');
-    const phoneInputs = document.querySelectorAll('input[name=user_phone]');
-
-    phoneInputs.forEach(item => {
-        item.addEventListener('input', () => {
-            item.value = item.value.replace(/\D/, '');
-        })
-    })
 
     const message = {
         lodiang: 'Загрузка...',
         success: 'Спасибо! Мы с Вами скоро свяжемся!',
         error: 'Упс! Что-то пошло не так...'
     };
+
+    validateNumberInputs('input[name=user_phone]')
 
     const postFormData = async (url, data) => {
         const res = await fetch(url, {
