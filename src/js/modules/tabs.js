@@ -22,6 +22,8 @@ const tabs = () => {
             }
         });
 
+        showTabContent(contentSelector, display);
+
     };  
 
     const hideTabContent = (contentSelector) => {
