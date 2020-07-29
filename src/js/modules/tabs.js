@@ -1,6 +1,6 @@
 const tabs = () => {
 
-    const bindTab = (parentTabSelector, tabSelector, contentSelector, activeClass) => {
+    const bindTab = (parentTabSelector, tabSelector, contentSelector, activeClass, display = 'block') => {
 
         const tabs = document.querySelectorAll(tabSelector);
 
@@ -16,7 +16,7 @@ const tabs = () => {
                         if(activeClass) {
                             item.classList.add(activeClass);
                         }
-                        showTabContent(contentSelector, i);
+                        showTabContent(contentSelector, display, i);
                     }
                 });
             }
@@ -30,17 +30,18 @@ const tabs = () => {
         });
     };
     
-    const showTabContent = (contentSelector, i = 0) => { 
+    const showTabContent = (contentSelector, display, i = 0) => { 
         hideTabContent(contentSelector);
         document.querySelectorAll(contentSelector).forEach((item, count) => {
             if(i == count) {
-                item.style.display = 'block';
+                item.style.display = display;
             }
         });
     };
 
     bindTab('.glazing_slider', '.glazing_block', '.glazing_content');
     bindTab('.decoration_slider', '.no_click', '.decoration_content > div > div', 'after_click');
+    bindTab('.balcon_icons', '.balcon_icons_img', '.big_img > img', 'do_image_more', 'inline');
 };
 
 export default tabs;

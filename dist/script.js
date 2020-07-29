@@ -17841,7 +17841,6 @@ var form = function form() {
   var forms = document.querySelectorAll('form');
   var inputs = document.querySelectorAll('input');
   var phoneInputs = document.querySelectorAll('input[name=user_phone]');
-  console.log(phoneInputs);
   phoneInputs.forEach(function (item) {
     item.addEventListener('input', function () {
       item.value = item.value.replace(/\D/, '');
@@ -17969,6 +17968,9 @@ var modal = function modal() {
 
   bindModal('.header_btn', '.popup_engineer', '.popup_engineer .popup_close');
   bindModal('.phone_link', '.popup', '.popup .popup_close');
+  bindModal('.popup_calc_btn', '.popup_calc', '.popup_calc_close');
+  bindModal('.popup_calc_button', '.popup_calc_profile', '.popup_calc_profile_close');
+  bindModal('.popup_calc_profile_button', '.popup_calc_end', '.popup_calc_end_close');
   showModalAfterTime('.popup', '.popup .popup_close', 60000);
 };
 
@@ -17994,6 +17996,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var tabs = function tabs() {
   var bindTab = function bindTab(parentTabSelector, tabSelector, contentSelector, activeClass) {
+    var display = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 'block';
     var tabs = document.querySelectorAll(tabSelector);
     document.querySelector(parentTabSelector).addEventListener('click', function (e) {
       if (e.target && e.target.classList.contains(tabSelector.replace(/\./, "")) || e.target.parentNode.classList.contains(tabSelector.replace(/\./, ""))) {
@@ -18007,7 +18010,7 @@ var tabs = function tabs() {
               item.classList.add(activeClass);
             }
 
-            showTabContent(contentSelector, i);
+            showTabContent(contentSelector, display, i);
           }
         });
       }
@@ -18020,18 +18023,19 @@ var tabs = function tabs() {
     });
   };
 
-  var showTabContent = function showTabContent(contentSelector) {
-    var i = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+  var showTabContent = function showTabContent(contentSelector, display) {
+    var i = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
     hideTabContent(contentSelector);
     document.querySelectorAll(contentSelector).forEach(function (item, count) {
       if (i == count) {
-        item.style.display = 'block';
+        item.style.display = display;
       }
     });
   };
 
   bindTab('.glazing_slider', '.glazing_block', '.glazing_content');
   bindTab('.decoration_slider', '.no_click', '.decoration_content > div > div', 'after_click');
+  bindTab('.balcon_icons', '.balcon_icons_img', '.big_img > img', 'do_image_more', 'inline');
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (tabs);
