@@ -17798,6 +17798,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/tabs */ "./src/js/modules/tabs.js");
 /* harmony import */ var _modules_form__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/form */ "./src/js/modules/form.js");
 /* harmony import */ var _modules_changeCalcState__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/changeCalcState */ "./src/js/modules/changeCalcState.js");
+/* harmony import */ var _modules_timer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/timer */ "./src/js/modules/timer.js");
+
 
 
 
@@ -17808,6 +17810,7 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_modalWindow__WEBPACK_IMPORTED_MODULE_1__["default"])();
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])();
   Object(_modules_form__WEBPACK_IMPORTED_MODULE_3__["default"])();
+  Object(_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])('2020-08-09', '.container1');
   Object(_modules_changeCalcState__WEBPACK_IMPORTED_MODULE_4__["default"])(calcState);
 });
 
@@ -18107,6 +18110,70 @@ var tabs = function tabs() {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (tabs);
+
+/***/ }),
+
+/***/ "./src/js/modules/timer.js":
+/*!*********************************!*\
+  !*** ./src/js/modules/timer.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var timer = function timer(deadline, containerSelector) {
+  var getTimeRemaining = function getTimeRemaining(deadline) {
+    var total = Date.parse(deadline) - Date.parse(new Date());
+    var seconds = Math.floor(total / 1000 % 60);
+    var minutes = Math.floor(total / 1000 / 60 % 60);
+    var hours = Math.floor(total / (1000 * 60 * 60) % 24);
+    var days = Math.floor(total / (1000 * 60 * 60 * 24));
+    return {
+      total: total,
+      seconds: seconds,
+      minutes: minutes,
+      hours: hours,
+      days: days
+    };
+  };
+
+  var addZeroToNumber = function addZeroToNumber(num) {
+    return num < 10 ? "0".concat(num) : num;
+  };
+
+  setTime;
+
+  var setTime = function setTime(deadline, containerSelector) {
+    var container = document.querySelector(containerSelector);
+    var seconds = container.querySelector('#seconds');
+    var minutes = container.querySelector('#minutes');
+    var hours = container.querySelector('#hours');
+    var days = container.querySelector('#days');
+
+    var updateClock = function updateClock() {
+      seconds.textContent = addZeroToNumber(getTimeRemaining(deadline).seconds);
+      minutes.textContent = addZeroToNumber(getTimeRemaining(deadline).minutes);
+      hours.textContent = addZeroToNumber(getTimeRemaining(deadline).hours);
+      days.textContent = addZeroToNumber(getTimeRemaining(deadline).days);
+    };
+
+    var timerInterval = setInterval(updateClock, 1000);
+    updateClock();
+
+    if (getTimeRemaining(deadline).total <= 0) {
+      clearInterval(timerInterval);
+      seconds.textContent = '00';
+      minutes.textContent = '00';
+      hours.textContent = '00';
+      days.textContent = '00';
+    }
+  };
+
+  setTime(deadline, containerSelector);
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (timer);
 
 /***/ }),
 
