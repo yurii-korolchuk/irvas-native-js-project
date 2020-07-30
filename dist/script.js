@@ -17799,6 +17799,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_form__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/form */ "./src/js/modules/form.js");
 /* harmony import */ var _modules_changeCalcState__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/changeCalcState */ "./src/js/modules/changeCalcState.js");
 /* harmony import */ var _modules_timer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/timer */ "./src/js/modules/timer.js");
+/* harmony import */ var _modules_bigImagePopup__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/bigImagePopup */ "./src/js/modules/bigImagePopup.js");
+
 
 
 
@@ -17812,7 +17814,51 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_form__WEBPACK_IMPORTED_MODULE_3__["default"])();
   Object(_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])('2020-08-09', '.container1');
   Object(_modules_changeCalcState__WEBPACK_IMPORTED_MODULE_4__["default"])(calcState);
+  Object(_modules_bigImagePopup__WEBPACK_IMPORTED_MODULE_6__["default"])();
 });
+
+/***/ }),
+
+/***/ "./src/js/modules/bigImagePopup.js":
+/*!*****************************************!*\
+  !*** ./src/js/modules/bigImagePopup.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var bigImagePopup = function bigImagePopup() {
+  var bindBigImagePopup = function bindBigImagePopup(parentSelector, imageClass) {
+    var bigImageContainer = document.createElement('div');
+    var bigImage = document.createElement('img');
+    var parent = document.querySelector(parentSelector);
+    bigImageContainer.classList.add('popup');
+    bigImageContainer.appendChild(bigImage);
+    bigImageContainer.style.justifyContent = 'center';
+    bigImageContainer.style.alignItems = 'center';
+    bigImage.style.width = '50%';
+    bigImage.style.height = '70%';
+    parent.appendChild(bigImageContainer);
+    parent.addEventListener('click', function (e) {
+      if (e.target && e.target.classList.contains(imageClass)) {
+        e.preventDefault();
+        bigImage.setAttribute('src', e.target.parentNode.getAttribute('href'));
+        bigImageContainer.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+
+      if (e.target && e.target.classList.contains('popup')) {
+        bigImageContainer.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    });
+  };
+
+  bindBigImagePopup('.works', 'preview');
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (bigImagePopup);
 
 /***/ }),
 
