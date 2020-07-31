@@ -4,7 +4,7 @@ const bigImagePopup = () => {
         const bigImage = document.createElement('img');
         const parent = document.querySelector(parentSelector);
 
-        bigImageContainer.classList.add('popup');
+        bigImageContainer.classList.add('popup', 'fadeIn');
         bigImageContainer.appendChild(bigImage);
         bigImageContainer.style.justifyContent = 'center';
         bigImageContainer.style.alignItems = 'center';

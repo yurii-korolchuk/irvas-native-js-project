@@ -17833,7 +17833,7 @@ var bigImagePopup = function bigImagePopup() {
     var bigImageContainer = document.createElement('div');
     var bigImage = document.createElement('img');
     var parent = document.querySelector(parentSelector);
-    bigImageContainer.classList.add('popup');
+    bigImageContainer.classList.add('popup', 'fadeIn');
     bigImageContainer.appendChild(bigImage);
     bigImageContainer.style.justifyContent = 'center';
     bigImageContainer.style.alignItems = 'center';
