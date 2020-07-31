@@ -15,4 +15,5 @@ window.addEventListener('DOMContentLoaded', () => {
     timer('2020-08-09', '.container1');
     changeCalcState(calcState);
     bigImagePopup();
+
 });
