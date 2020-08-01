@@ -12,7 +12,7 @@ window.addEventListener('DOMContentLoaded', () => {
     modal();
     tabs();
     form();
-    timer('2020-08-09', '.container1');
+    timer();
     changeCalcState(calcState);
     bigImagePopup();
 

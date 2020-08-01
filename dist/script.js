@@ -296,6 +296,36 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/array-method-has-species-support.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/core-js/internals/array-method-has-species-support.js ***!
+  \****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var fails = __webpack_require__(/*! ../internals/fails */ "./node_modules/core-js/internals/fails.js");
+var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "./node_modules/core-js/internals/well-known-symbol.js");
+var V8_VERSION = __webpack_require__(/*! ../internals/v8-version */ "./node_modules/core-js/internals/v8-version.js");
+
+var SPECIES = wellKnownSymbol('species');
+
+module.exports = function (METHOD_NAME) {
+  // We can't use this feature detection in V8 since it causes
+  // deoptimization and serious performance degradation
+  // https://github.com/zloirock/core-js/issues/677
+  return V8_VERSION >= 51 || !fails(function () {
+    var array = [];
+    var constructor = array.constructor = {};
+    constructor[SPECIES] = function () {
+      return { foo: 1 };
+    };
+    return array[METHOD_NAME](Boolean).foo !== 1;
+  });
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/array-species-create.js":
 /*!****************************************************************!*\
   !*** ./node_modules/core-js/internals/array-species-create.js ***!
@@ -2488,6 +2518,56 @@ module.exports = function (name) {
     else WellKnownSymbolsStore[name] = createWellKnownSymbol('Symbol.' + name);
   } return WellKnownSymbolsStore[name];
 };
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/es.array.filter.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/core-js/modules/es.array.filter.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var $filter = __webpack_require__(/*! ../internals/array-iteration */ "./node_modules/core-js/internals/array-iteration.js").filter;
+var arrayMethodHasSpeciesSupport = __webpack_require__(/*! ../internals/array-method-has-species-support */ "./node_modules/core-js/internals/array-method-has-species-support.js");
+
+// `Array.prototype.filter` method
+// https://tc39.github.io/ecma262/#sec-array.prototype.filter
+// with adding support of @@species
+$({ target: 'Array', proto: true, forced: !arrayMethodHasSpeciesSupport('filter') }, {
+  filter: function filter(callbackfn /* , thisArg */) {
+    return $filter(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/es.array.map.js":
+/*!******************************************************!*\
+  !*** ./node_modules/core-js/modules/es.array.map.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var $map = __webpack_require__(/*! ../internals/array-iteration */ "./node_modules/core-js/internals/array-iteration.js").map;
+var arrayMethodHasSpeciesSupport = __webpack_require__(/*! ../internals/array-method-has-species-support */ "./node_modules/core-js/internals/array-method-has-species-support.js");
+
+// `Array.prototype.map` method
+// https://tc39.github.io/ecma262/#sec-array.prototype.map
+// with adding support of @@species
+$({ target: 'Array', proto: true, forced: !arrayMethodHasSpeciesSupport('map') }, {
+  map: function map(callbackfn /* , thisArg */) {
+    return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
 
 
 /***/ }),
@@ -17812,7 +17892,7 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_modalWindow__WEBPACK_IMPORTED_MODULE_1__["default"])();
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])();
   Object(_modules_form__WEBPACK_IMPORTED_MODULE_3__["default"])();
-  Object(_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])('2020-08-09', '.container1');
+  Object(_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])();
   Object(_modules_changeCalcState__WEBPACK_IMPORTED_MODULE_4__["default"])(calcState);
   Object(_modules_bigImagePopup__WEBPACK_IMPORTED_MODULE_6__["default"])();
 });
@@ -17836,9 +17916,9 @@ var bigImagePopup = function bigImagePopup() {
     bigImageContainer.classList.add('popup', 'fadeIn');
     bigImageContainer.appendChild(bigImage);
     bigImageContainer.style.justifyContent = 'center';
-    bigImageContainer.style.alignItems = 'center';
-    bigImage.style.width = '50%';
-    bigImage.style.height = '70%';
+    bigImageContainer.style.alignItems = 'center'; // bigImage.style.width = '40%';
+    // bigImage.style.height = '70%';
+
     parent.appendChild(bigImageContainer);
     parent.addEventListener('click', function (e) {
       if (e.target && e.target.classList.contains(imageClass)) {
@@ -17906,14 +17986,11 @@ var changeCalcState = function changeCalcState(state) {
 
           case 'click':
             state[prop] = e.target.dataset.type;
-            console.log(e.target);
             break;
 
           default:
             return;
         }
-
-        console.log(state);
       });
     });
   };
@@ -18037,21 +18114,71 @@ var form = function form() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_array_filter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.filter */ "./node_modules/core-js/modules/es.array.filter.js");
+/* harmony import */ var core_js_modules_es_array_filter__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_filter__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_array_map__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.map */ "./node_modules/core-js/modules/es.array.map.js");
+/* harmony import */ var core_js_modules_es_array_map__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_map__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__);
+
+
 
 
 var modal = function modal() {
   var bindModal = function bindModal(openTriggerSelector, modalQuerySelector, closeTriggerSelector) {
+    var paramsToCheck = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
+
+    /* paramsToCheck - массив всех параметров (инпуты, чекбоксы и т.д.), 
+       которые должны быть проверены перед открытием следующего модального окна, первый 
+       элемент массива обязательно является селектором модального окна, в котором проводится проверка */
     document.querySelectorAll(openTriggerSelector).forEach(function (item) {
       item.addEventListener('click', function (e) {
         if (e.target) {
           e.preventDefault();
         }
 
-        openModal(modalQuerySelector, closeTriggerSelector);
+        if (paramsToCheck.length) {
+          var itemsToCheck = paramsToCheck.filter(function (item, i) {
+            return i != 0;
+          }).map(function (item) {
+            return document.querySelector(item);
+          });
+
+          var _modal = document.querySelector(paramsToCheck[0]);
+
+          var warning = document.createElement('span');
+          warning.classList.add('status', 'fadeIn');
+          warning.textContent = 'Пожалуйста, введите все данные';
+          var checked;
+          itemsToCheck.forEach(function (item, i) {
+            switch (item.type) {
+              case 'text':
+                item.value ? openModal(modalQuerySelector, closeTriggerSelector) : putWarningInModal(_modal, warning, '.status');
+                break;
+
+              case 'checkbox':
+                checked = item.checked ? true : false;
+                i === itemsToCheck.length - 1 ? checked ? openModal(modalQuerySelector, closeTriggerSelector) : putWarningInModal(_modal, warning, '.status') : null;
+                break;
+
+              default:
+                openModal(modalQuerySelector, closeTriggerSelector);
+            }
+          });
+        } else {
+          openModal(modalQuerySelector, closeTriggerSelector);
+        }
       });
     });
+  };
+
+  var putWarningInModal = function putWarningInModal(modal, warning, warningSelector) {
+    if (!modal.contains(document.querySelector(warningSelector))) {
+      modal.appendChild(warning);
+      setTimeout(function () {
+        warning.remove();
+      }, 2000);
+    }
   };
 
   var showModalAfterTime = function showModalAfterTime(modalQuerySelector, closeTriggerSelector, time) {
@@ -18100,9 +18227,9 @@ var modal = function modal() {
   bindModal('.header_btn', '.popup_engineer', '.popup_engineer .popup_close');
   bindModal('.phone_link', '.popup_modal', '.popup_modal .popup_close');
   bindModal('.popup_calc_btn', '.popup_calc', '.popup_calc_close');
-  bindModal('.popup_calc_button', '.popup_calc_profile', '.popup_calc_profile_close');
-  bindModal('.popup_calc_profile_button', '.popup_calc_end', '.popup_calc_end_close');
-  showModalAfterTime('.popup', '.popup .popup_close', 60000);
+  bindModal('.popup_calc_button', '.popup_calc_profile', '.popup_calc_profile_close', ['.popup_calc_content', '#width', '#height']);
+  bindModal('.popup_calc_profile_button', '.popup_calc_end', '.popup_calc_end_close', ['.popup_calc_profile_content', '#cold_check', '#warm_check']);
+  showModalAfterTime('.popup_modal', '.popup_modal .popup_close', 60000);
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (modal);
@@ -18231,7 +18358,7 @@ var timer = function timer(deadline, containerSelector) {
     }
   };
 
-  setTime(deadline, containerSelector);
+  setTime('2020-08-09', '.container1');
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (timer);

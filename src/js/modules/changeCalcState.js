@@ -28,13 +28,11 @@ const changeCalcState = (state) => {
 
                     case 'click': 
                         state[prop] = e.target.dataset.type;
-                        console.log(e.target);
                         break;
                     default:
                         return;
                     
                 }
-                console.log(state);
             });
         })
     }

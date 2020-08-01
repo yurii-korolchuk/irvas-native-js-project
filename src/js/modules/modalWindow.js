@@ -1,14 +1,56 @@
 const modal = () => {
-    const bindModal = (openTriggerSelector, modalQuerySelector, closeTriggerSelector) => {
+    const bindModal = (openTriggerSelector, modalQuerySelector, closeTriggerSelector, paramsToCheck = []) => {
+        /* paramsToCheck - массив всех параметров (инпуты, чекбоксы и т.д.), 
+           которые должны быть проверены перед открытием следующего модального окна, первый 
+           элемент массива обязательно является селектором модального окна, в котором проводится проверка */
+
         document.querySelectorAll(openTriggerSelector).forEach(item => {
             item.addEventListener('click', (e) => {
                 if(e.target) {
                     e.preventDefault();
                 }
-                openModal(modalQuerySelector, closeTriggerSelector);
+
+                if(paramsToCheck.length) {
+                    const itemsToCheck = paramsToCheck.filter((item, i) => i != 0).map(item => document.querySelector(item));
+                    const modal = document.querySelector(paramsToCheck[0]);
+
+                    const warning = document.createElement('span');
+                    warning.classList.add('status', 'fadeIn');
+                    warning.textContent = 'Пожалуйста, введите все данные';
+
+                    let checked;
+
+                    itemsToCheck.forEach((item, i) => {
+                        switch(item.type) {
+                            case 'text':
+                                item.value ? openModal(modalQuerySelector, closeTriggerSelector) : putWarningInModal(modal, warning, '.status');
+                                break;
+                            case 'checkbox':
+                                checked = item.checked ? true : false;
+                                i === itemsToCheck.length - 1 ? (checked ? openModal(modalQuerySelector, closeTriggerSelector) : putWarningInModal(modal, warning, '.status')) : null;
+                                break;
+                                
+                            default:
+                                openModal(modalQuerySelector, closeTriggerSelector);
+                        }
+                    })
+                } else {
+                    openModal(modalQuerySelector, closeTriggerSelector);
+                }
+                
             });
         });
     };
+
+    const putWarningInModal = (modal, warning, warningSelector) => {
+        if(!modal.contains(document.querySelector(warningSelector))) {
+            modal.appendChild(warning);
+
+            setTimeout(() => {
+                warning.remove();
+            }, 2000)
+        } 
+    }
     
     const showModalAfterTime = (modalQuerySelector, closeTriggerSelector, time) => {
         setTimeout(() => {
@@ -34,7 +76,7 @@ const modal = () => {
 
     }
     
-    const openModal = (modalQuerySelector, closeTriggerSelector) => {
+    const openModal = (modalQuerySelector, closeTriggerSelector) => { 
         const modal = document.querySelector(modalQuerySelector);
         const scrollWidth = calcScrollWidth();
 
@@ -42,7 +84,7 @@ const modal = () => {
         modal.style.display = 'block';
 
         document.body.style.marginRight = `${scrollWidth}px`;
-
+       
         const closeModal = (modalQuerySelector) => {
             const modal = document.querySelector(modalQuerySelector);
             document.body.style.overflow = 'auto';
@@ -65,10 +107,9 @@ const modal = () => {
     bindModal('.header_btn', '.popup_engineer', '.popup_engineer .popup_close');
     bindModal('.phone_link', '.popup_modal', '.popup_modal .popup_close');
     bindModal('.popup_calc_btn', '.popup_calc', '.popup_calc_close');
-    bindModal('.popup_calc_button', '.popup_calc_profile', '.popup_calc_profile_close');
-    bindModal('.popup_calc_profile_button', '.popup_calc_end', '.popup_calc_end_close');
-    showModalAfterTime('.popup', '.popup .popup_close', 60000);
+    bindModal('.popup_calc_button', '.popup_calc_profile', '.popup_calc_profile_close', ['.popup_calc_content', '#width', '#height']);
+    bindModal('.popup_calc_profile_button', '.popup_calc_end', '.popup_calc_end_close', ['.popup_calc_profile_content', '#cold_check', '#warm_check']);
+    showModalAfterTime('.popup_modal', '.popup_modal .popup_close', 60000);
 };
 
 export default modal;
-

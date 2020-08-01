@@ -9,8 +9,8 @@ const bigImagePopup = () => {
         bigImageContainer.style.justifyContent = 'center';
         bigImageContainer.style.alignItems = 'center';
 
-        bigImage.style.width = '50%';
-        bigImage.style.height = '70%';
+        // bigImage.style.width = '40%';
+        // bigImage.style.height = '70%';
 
         parent.appendChild(bigImageContainer);
 
@@ -31,9 +31,6 @@ const bigImagePopup = () => {
     }
 
     bindBigImagePopup('.works', 'preview');
-
-
-
 }
 
 export default bigImagePopup;

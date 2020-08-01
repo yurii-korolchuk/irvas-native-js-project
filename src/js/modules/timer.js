@@ -48,8 +48,7 @@ const timer = (deadline, containerSelector) => {
         }
     }
 
-    setTime(deadline, containerSelector);
-
+    setTime('2020-08-09', '.container1');
 }
 
 export default timer;
