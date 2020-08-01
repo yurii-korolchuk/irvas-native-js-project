@@ -19,7 +19,7 @@ const timer = (deadline, containerSelector) => {
     const addZeroToNumber = (num) => {
         return num < 10 ? `0${num}` : num;
     }
-    setTime
+    
     const setTime = (deadline, containerSelector) => {
         const container = document.querySelector(containerSelector);
 
